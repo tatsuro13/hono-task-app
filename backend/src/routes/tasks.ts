@@ -1,8 +1,11 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
+import { db } from "../db/connection";
+import { tasks } from "../db/schema";
+import { eq } from "drizzle-orm";
 
-const tasks = new Hono();
+const taskRouter = new Hono();
 
 let mockTasks = [
     { id: 1, title: "Task 1", completed: false },
@@ -16,23 +19,37 @@ const taskSchema = z.object({
     completed: z.boolean().optional().default(false)
 });
 
-// get all tasks endpoint
-tasks.get("/", (c) => c.json(mockTasks));
+// Create a task(POST / tasks)
+taskRouter.post('/',
+    zValidator('json',taskSchema), async (c) => {
+        const { title, completed } = c.req.valid('json');
+        const [insertedTask] = await db.insert(tasks).values({ title, completed });
+        return c.json(insertedTask, 201);
+    }
+);
 
-// new task add endpoint
-tasks.post("/", zValidator('json',taskSchema), (c) => {
-    const { title, completed } =  c.req.valid('json');
-    console.log('Received Body:', { title, completed });
-
-    // create new task
-    const newTask = {
-        id: mockTasks.length + 1,
-        title,
-        completed
-    };
-    mockTasks.push(newTask);
-
-    return c.json(newTask, 201); // 201 Created
+// Get all tasks(GET /tasks)
+taskRouter.get('/', async (c) => {
+    const allTasks = await db.select().from(tasks);
+    return c.json(allTasks);
 });
 
-export default tasks;
+// Update a task(PUT /tasks/:id)
+taskRouter.put('/:id',
+    zValidator('json',taskSchema), async (c) => {
+        const id = Number(c.req.param('id'));
+        const { title, completed } = c.req.valid('json');
+
+        await db.update(tasks).set({ title, completed }).where(eq(tasks.id,(id)));
+        return c.json({ success: true })
+    }
+);
+
+// Delete a task(DELETE /tasks/:id)
+taskRouter.delete('/:id', async (c) => {
+    const id = Number(c.req.param('id'));
+    await db.delete(tasks).where(eq(tasks.id,(id)));
+    return c.json({ success: true });
+});
+
+export default taskRouter;
