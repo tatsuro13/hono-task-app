@@ -12,7 +12,7 @@ app.route("/tasks", tasks);
 // serve the app
 serve({
     fetch: app.fetch,
-    port: 3000,
+    port: 9000,
 })
 
-console.log("Server running on http://localhost:3000");
+console.log("Server running on http://localhost:9000");
