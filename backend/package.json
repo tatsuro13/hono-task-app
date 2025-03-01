@@ -6,7 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "docker-compose up -d",
     "dev": "ts-node src/index.ts",
-    "stop": "docker-compose down"
+    "stop": "docker-compose down",
+    "drizzle:generate": "drizzle-kit generate:mysql",
+    "drizzle:sync": "drizzle-kit sync:mysql"
   },
   "keywords": [],
   "author": "",
