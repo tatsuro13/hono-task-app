@@ -7,12 +7,6 @@ import { eq } from "drizzle-orm";
 
 const taskRouter = new Hono();
 
-let mockTasks = [
-    { id: 1, title: "Task 1", completed: false },
-    { id: 2, title: "Task 2", completed: true },
-    { id: 3, title: "Task 3", completed: false }
-];
-
 // task validator
 const taskSchema = z.object({
     title: z.string().min(1, 'Title is required'),
