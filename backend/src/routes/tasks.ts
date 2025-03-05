@@ -16,8 +16,8 @@ const taskSchema = z.object({
 // Create a task(POST / tasks)
 taskRouter.post('/',
     zValidator('json',taskSchema), async (c) => {
-        const { title, completed } = c.req.valid('json');
-        const [insertedTask] = await db.insert(tasks).values({ title, completed });
+        const { title } = c.req.valid('json');
+        const [insertedTask] = await db.insert(tasks).values({ title, completed: false })
         return c.json(insertedTask, 201);
     }
 );
