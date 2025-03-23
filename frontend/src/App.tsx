@@ -31,7 +31,6 @@ function App() {
   const handleToggle = async (task: Task) => {
     await toggleTaskCompletion(task.id, task.title, task.completed);
 
-    // ✅ ローカル状態を即更新
     setTasks((prev) =>
       prev.map((t) =>
         t.id === task.id ? { ...t, completed: !t.completed } : t
