@@ -26,3 +26,13 @@ export const deleteTasks = async (id: number) => {
     method: 'DELETE'
   });
 }
+
+export const toggleTaskCompletion = async (id: number, title: string, completed: boolean) => {
+  await fetch(`${API_URL}/tasks/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ title, completed: !completed })
+  });
+}
