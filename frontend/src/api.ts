@@ -20,3 +20,9 @@ export const addTask = async (title: string) => {
   
   return res.json();
 }
+
+export const deleteTasks = async (id: number) => {
+  await fetch(`${API_URL}/tasks/${id}`, {
+    method: 'DELETE'
+  });
+}

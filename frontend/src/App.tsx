@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { addTask, fetchTasks } from './api'
+import { addTask, deleteTasks, fetchTasks } from './api'
 
 type Task = {
   id: number
@@ -18,12 +18,14 @@ function App() {
 
   const handleAddTask = async () => {
     if (!newTaskTitle.trim()) return;
-    
-   
     const newTask = await addTask(newTaskTitle);
       setTasks([...tasks, newTask]);
       setNewTaskTitle('');
-    
+  }
+
+  const handleDeleteTask = async (id: number) => {
+    await deleteTasks(id);
+    setTasks(tasks.filter((task) => task.id !== id));
   }
 
   return (
@@ -36,6 +38,7 @@ function App() {
          {tasks.map((task:Task) => (
             <li key={task.id}>
               {task.title} : {task.completed ? '完了' : '未完了'}
+              <button onClick={() => handleDeleteTask(task.id)}>削除</button>
             </li>
           ))}
         </ul>
