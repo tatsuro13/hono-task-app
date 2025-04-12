@@ -8,3 +8,12 @@ export const tasks = mysqlTable(
         completed: boolean('completed').notNull().default(false),
     }
 )
+
+export const users = mysqlTable(
+    'users',
+    {
+        id: serial('id').primaryKey(),
+        name: varchar('name', { length: 255 }).unique().notNull(),
+        passwordHash: varchar('password_hash', { length: 255 }).unique().notNull(),
+    }
+)
