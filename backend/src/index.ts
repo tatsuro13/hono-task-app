@@ -1,7 +1,8 @@
 import { Hono } from "hono";
 import { serve } from "@hono/node-server";
-import tasks from "./routes/tasks";
+import taskRouter from "./routes/tasks";
 import { cors } from 'hono/cors'
+import authRouter from "./routes/auth";
 
 const app = new Hono();
 
@@ -16,7 +17,10 @@ app.use(
 app.get("/", (c) => c.text("Hello Hono!") );
 
 // tasks endpoint
-app.route("/tasks", tasks);
+app.route("/tasks", taskRouter);
+
+// auth endpoint
+app.route("/auth", authRouter);
 
 // serve the app
 serve({
