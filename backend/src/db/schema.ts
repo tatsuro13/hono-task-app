@@ -13,7 +13,7 @@ export const users = mysqlTable(
     'users',
     {
         id: serial('id').primaryKey(),
-        name: varchar('name', { length: 255 }).unique().notNull(),
+        userName: varchar('name', { length: 255 }).unique().notNull(),
         passwordHash: varchar('password_hash', { length: 255 }).unique().notNull(),
     }
 )
